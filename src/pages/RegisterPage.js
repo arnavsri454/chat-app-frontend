@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { registerUser } from '../services/api';
 
 const RegisterPage = () => {
-  const { register } = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,9 +11,9 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(username, email, password);
+      await registerUser(username, email, password);
       alert('Registration successful! Please login.');
-      navigate('/');
+      navigate('/login'); // ✅ Redirect to login page
     } catch (error) {
       alert('Registration failed');
     }
@@ -47,7 +46,7 @@ const RegisterPage = () => {
         />
         <button type="submit">Register</button>
       </form>
-      <p>Already have an account? <Link to="/">Login here</Link></p>
+      <p>Already have an account? <Link to="/login">Login here</Link></p>
     </div>
   );
 };
