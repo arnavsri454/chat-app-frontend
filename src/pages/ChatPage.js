@@ -3,16 +3,14 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+const socket = io(process.env.REACT_APP_API_URL); // ✅ Initialize once
+
 const ChatPage = () => {
   const { user, logout } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-  
-  // Connect to backend socket (REACT_APP_API_URL from .env)
-  const socket = io(process.env.REACT_APP_API_URL);
 
   useEffect(() => {
-    // Fetch existing messages from the backend
     const fetchMessages = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/chat`);
@@ -21,22 +19,22 @@ const ChatPage = () => {
         console.error('Error fetching messages:', error);
       }
     };
+
     fetchMessages();
 
-    // Listen for incoming messages
+    // Listen for new messages
     socket.on('receiveMessage', (newMessage) => {
       setMessages((prev) => [...prev, newMessage]);
     });
 
-    // Clean up socket connection on component unmount
+    // Cleanup function to avoid duplicate connections
     return () => {
-      socket.disconnect();
+      socket.off('receiveMessage'); // ✅ Remove event listener to prevent duplicates
     };
-  }, [socket]);
+  }, []); // ✅ Empty dependency array (runs only once)
 
   const sendMessage = () => {
     if (message.trim()) {
-      // Here we use user's token or a placeholder if not set
       const newMessage = { sender: user?.token || 'Anonymous', content: message };
       socket.emit('sendMessage', newMessage);
       setMessages((prev) => [...prev, newMessage]);
