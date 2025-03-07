@@ -9,7 +9,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerUser = async (username, email, password) => {
-  return api.post('/api/auth/register`, { username, email, password });
+  return api.post('/api/auth/register', { username, email, password }); // ✅ FIXED
 };
 
 export default api;
