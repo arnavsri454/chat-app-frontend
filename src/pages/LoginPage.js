@@ -25,29 +25,41 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleLogin}>
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account? <Link to="/register">Register here</Link>
-      </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-96">
+        <h2 className="text-3xl font-bold text-center text-gray-700 mb-4">Login</h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+          <button 
+            type="submit"
+            className="w-full py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-center text-gray-600 mt-4">
+          Don't have an account? 
+          <Link to="/register" className="text-blue-500 font-bold hover:underline ml-1">
+            Register here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
