@@ -15,8 +15,9 @@ const LoginPage = () => {
       const res = await loginUser(email, password);
       localStorage.setItem('token', res.data.accessToken);
       setUser({ token: res.data.accessToken });
-      navigate('/chat'); // ✅ Redirect after login
+      navigate('/chat'); // Redirect after successful login
     } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
       alert('Login failed!');
     }
   };
