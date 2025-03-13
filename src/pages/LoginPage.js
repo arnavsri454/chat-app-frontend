@@ -15,12 +15,16 @@ const LoginPage = () => {
     setError(null);
     try {
       const res = await loginUser(email, password);
-      localStorage.setItem('token', res.data.accessToken);
-      setUser({ token: res.data.accessToken });
-      navigate('/chat'); // Redirect after successful login
+      if (res && res.data && res.data.accessToken) {
+        localStorage.setItem('token', res.data.accessToken);
+        setUser({ token: res.data.accessToken });
+        navigate('/chat'); // Redirect after successful login
+      } else {
+        throw new Error("Invalid server response");
+      }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
-      setError("Invalid credentials");
+      setError(error.response?.data?.message || "Invalid credentials");
     }
   };
 
