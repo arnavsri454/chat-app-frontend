@@ -13,16 +13,19 @@ const RegisterPage = () => {
     e.preventDefault();
     setError(null);
 
-    // Validate inputs (optional)
     if (!username || !email || !password) {
       setError("All fields are required.");
       return;
     }
 
     try {
-      await registerUser(username, email, password);
-      alert('Registration successful! Please login.');
-      navigate('/login'); // Redirect to login page
+      const res = await registerUser(username, email, password);
+      if (res && res.data) {
+        alert('Registration successful! Please login.');
+        navigate('/login'); // Redirect to login page
+      } else {
+        throw new Error("Invalid server response");
+      }
     } catch (err) {
       console.error("Registration failed:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Registration failed.");
