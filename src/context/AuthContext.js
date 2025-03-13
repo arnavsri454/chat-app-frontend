@@ -17,33 +17,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, { email, password });
-      const { accessToken } = res.data;
-      localStorage.setItem('token', accessToken);
-      setUser({ token: accessToken });
-      return res.data;
+      if (res.data.accessToken) {
+        localStorage.setItem('token', res.data.accessToken);
+        setUser({ token: res.data.accessToken });
+        return res.data;
+      } else {
+        throw new Error("Invalid response from server");
+      }
     } catch (error) {
       console.error('Login error:', error);
       throw error;
     }
   };
 
-  const register = async (username, email, password) => {
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, { username, email, password });
-      return res.data;
-    } catch (error) {
-      console.error('Register error:', error);
-      throw error;
-    }
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, setUser }}>
       {children}
     </AuthContext.Provider>
   );
