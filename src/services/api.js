@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL || "https://chat-app-backend-ws6b.onrender.com"; // ✅ Fallback if .env is missing
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL, // Ensure this is set correctly in your .env file
+  baseURL: API_URL, 
   headers: { "Content-Type": "application/json" },
 });
 
